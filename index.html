@@ -3,45 +3,558 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskEarner - Unlock Tasks</title>
+    <title>StudyEarn - 24/7 Study Help & Task Marketplace</title>
     <style>
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f9; margin: 0; }
-        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 100%; }
-        input { width: 85%; padding: 12px; margin: 15px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; text-align: center; }
-        button { background: #1b1464; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; width: 90%; font-weight: bold; }
-        button:hover { background: #2e2482; }
-        .status { margin-top: 15px; color: #666; font-size: 14px; font-weight: bold; }
+        :root {
+            --primary-red: #dc2626;
+            --primary-red-hover: #b91c1c;
+            --btn-pink: #ff2a7a;
+            --btn-pink-hover: #e02469;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --bg-light: #ffffff;
+            --modal-red-gradient: linear-gradient(135deg, #ef4444, #dc2626, #991b1b);
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fafafa;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Top Header Navigation Bar */
+        .navbar {
+            background-color: var(--bg-light);
+            border-bottom: 1px solid var(--border-color);
+            padding: 14px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary-red);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: #1e293b;
+            font-weight: 400;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-link {
+            color: #334155;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .signup-top-btn {
+            background-color: var(--btn-pink);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .signup-top-btn:hover {
+            background-color: var(--btn-pink-hover);
+        }
+
+        /* Dynamic Nav Categories Bar Container */
+        .categories-container {
+            position: relative;
+            background-color: var(--bg-light);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 90;
+        }
+
+        .categories-bar {
+            padding: 0 40px;
+            display: flex;
+            gap: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        /* Nav Dropdown Triggers */
+        .cat-item { 
+            padding: 14px 16px;
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 4px;
+            position: relative;
+            transition: color 0.2s;
+        }
+        
+        .cat-item:hover { 
+            color: var(--primary-red); 
+            background-color: #f8fafc;
+        }
+
+        /* Mega Dropdown Panel Styling */
+        .mega-panel {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            border-bottom: 2px solid var(--border-color);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            display: none;
+            padding: 30px 40px;
+            box-sizing: border-box;
+            z-index: 99;
+        }
+
+        .mega-panel-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-red);
+            margin: 0 0 16px 0;
+        }
+
+        .mega-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px 30px;
+        }
+
+        .mega-link {
+            font-size: 13px;
+            color: #475569;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .mega-link:hover {
+            color: var(--primary-red);
+        }
+
+        /* Reveal drop panel on hover state */
+        .cat-item:hover .mega-panel {
+            display: block;
+        }
+
+        /* Vertical Dropdown styling for All Subjects */
+        .vertical-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 40px;
+            width: 240px;
+            background: white;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            z-index: 99;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .vertical-item {
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .vertical-item:hover {
+            background-color: #f8fafc;
+            color: var(--primary-red);
+        }
+
+        .cat-item-all:hover .vertical-dropdown {
+            display: flex;
+        }
+
+        /* Hero Showcase Section */
+        .hero-section {
+            position: relative;
+            background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1600') center/cover no-repeat;
+            padding: 100px 40px;
+            text-align: center;
+            color: white;
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 800;
+            margin: 0 0 16px 0;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            margin: 0 0 32px 0;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .action-cta-btn {
+            background-color: var(--btn-pink);
+            color: white;
+            border: none;
+            padding: 16px 36px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 42, 122, 0.4);
+            transition: transform 0.2s, background-color 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .action-cta-btn:hover {
+            transform: translateY(-2px);
+            background-color: var(--btn-pink-hover);
+        }
+
+        .search-container {
+            margin-top: 40px;
+            width: 100%;
+            max-width: 680px;
+            position: relative;
+        }
+
+        .hero-search-bar {
+            width: 100%;
+            padding: 18px 24px;
+            border-radius: 30px;
+            border: none;
+            font-size: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        /* Overlay Lightbox Modal (Split Screen Screen 2) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .auth-container-box {
+            background-color: var(--bg-light);
+            width: 100%;
+            max-width: 780px;
+            height: 480px;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+            animation: modalFadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalFadeUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-close-trigger {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            font-size: 22px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .modal-graphic-pane {
+            flex: 1;
+            background: var(--modal-red-gradient);
+            padding: 40px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .modal-graphic-pane h2 {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        .modal-form-pane {
+            flex: 1.2;
+            padding: 40px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .tab-toggle-header {
+            display: flex;
+            gap: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 8px;
+        }
+
+        .tab-btn { cursor: pointer; color: var(--text-muted); padding-bottom: 8px; position: relative; }
+        .tab-btn.active { color: var(--primary-red); }
+        .tab-btn.active::after {
+            content: ''; position: absolute; bottom: -10px; left: 0; width: 100%; height: 2px; background-color: var(--primary-red);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input-field {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+            outline: none;
+            background-color: #f8fafc;
+        }
+
+        .form-submit-btn {
+            background-color: var(--primary-red);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            text-transform: uppercase;
+            transition: background-color 0.2s;
+        }
+
+        .form-submit-btn:hover {
+            background-color: var(--primary-red-hover);
+        }
+
+        .mpesa-helper-text {
+            font-size: 12px;
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 12px;
+        }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>Unlock Premium Tasks</h2>
-    <p>Pay KES 125 via M-Pesa to instantly unlock high-paying evaluation tasks.</p>
-    
-    <input type="tel" id="phone" placeholder="e.g., 254712345678" value="254">
-    <button onclick="triggerPayment()">Pay KES 125 via M-Pesa</button>
-    
-    <div class="status" id="statusMessage"></div>
-</div>
+    <!-- Main Header Navbar -->
+    <nav class="navbar">
+        <a href="#" class="logo">Study<span>Earn</span></a>
+        <div class="nav-right">
+            <span class="nav-link">Study Tools</span>
+            <span class="nav-link">Educators</span>
+            <span class="nav-link" onclick="toggleAuthModal()">Login</span>
+            <button class="signup-top-btn" onclick="toggleAuthModal()">Sign Up</button>
+        </div>
+    </nav>
 
-<script>
-    async function triggerPayment() {
-        const phone = document.getElementById('phone').value;
-        const status = document.getElementById('statusMessage');
-        
-        if (phone.length < 12 || !phone.startsWith('254')) {
-            status.innerText = "Please enter a valid phone number starting with 254";
-            status.style.color = "red";
-            return;
+    <!-- Categories Dropdown Navigation Bar (Matches Images) -->
+    <div class="categories-container">
+        <div class="categories-bar">
+            
+            <!-- All Subjects Vertical Menu Component -->
+            <div class="cat-item cat-item-all">
+                ☰ All Subjects ▾
+                <div class="vertical-dropdown">
+                    <div class="vertical-item">Business <span>➔</span></div>
+                    <div class="vertical-item">Humanities <span>➔</span></div>
+                    <div class="vertical-item">Mathematics <span>➔</span></div>
+                    <div class="vertical-item">Programming <span>➔</span></div>
+                    <div class="vertical-item">Science <span>➔</span></div>
+                    <div class="vertical-item">Writing <span>➔</span></div>
+                    <div class="vertical-item">Law <span>➔</span></div>
+                </div>
+            </div>
+
+            <!-- Business Mega Menu Dropdown -->
+            <div class="cat-item">
+                💼 Business ▾
+                <div class="mega-panel">
+                    <div class="mega-panel-title">Business</div>
+                    <div class="mega-grid">
+                        <a href="#" class="mega-link">Accounting</a>
+                        <a href="#" class="mega-link">Excel</a>
+                        <a href="#" class="mega-link">Real Estate</a>
+                        <a href="#" class="mega-link">Advertising</a>
+                        <a href="#" class="mega-link">Facebook Marketing</a>
+                        <a href="#" class="mega-link">Sales</a>
+                        <a href="#" class="mega-link">Data Analytics</a>
+                        <a href="#" class="mega-link">Management</a>
+                        <a href="#" class="mega-link">Supply Chain</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Humanities Mega Menu Dropdown -->
+            <div class="cat-item">
+                🌍 Humanities ▾
+                <div class="mega-panel">
+                    <div class="mega-panel-title">Humanities</div>
+                    <div class="mega-grid">
+                        <a href="#" class="mega-link">African Studies</a>
+                        <a href="#" class="mega-link">Philosophy</a>
+                        <a href="#" class="mega-link">History</a>
+                        <a href="#" class="mega-link">Art & Design</a>
+                        <a href="#" class="mega-link">Psychology</a>
+                        <a href="#" class="mega-link">Literature</a>
+                        <a href="#" class="mega-link">Anthropology</a>
+                        <a href="#" class="mega-link">Political Science</a>
+                        <a href="#" class="mega-link">Sociology</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mathematics Mega Menu Dropdown -->
+            <div class="cat-item">
+                📐 Mathematics ▾
+                <div class="mega-panel">
+                    <div class="mega-panel-title">Mathematics</div>
+                    <div class="mega-grid">
+                        <a href="#" class="mega-link">Algebra</a>
+                        <a href="#" class="mega-link">Calculus</a>
+                        <a href="#" class="mega-link">Statistics</a>
+                        <a href="#" class="mega-link">Geometry</a>
+                        <a href="#" class="mega-link">Linear Algebra</a>
+                        <a href="#" class="mega-link">Trigonometry</a>
+                        <a href="#" class="mega-link">Discrete Math</a>
+                        <a href="#" class="mega-link">Probability</a>
+                        <a href="#" class="mega-link">Number Theory</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Science Mega Menu Dropdown -->
+            <div class="cat-item">
+                🔬 Science ▾
+                <div class="mega-panel">
+                    <div class="mega-panel-title">Science</div>
+                    <div class="mega-grid">
+                        <a href="#" class="mega-link">Agriculture</a>
+                        <a href="#" class="mega-link">Chemistry</a>
+                        <a href="#" class="mega-link">Microbiology</a>
+                        <a href="#" class="mega-link">Anatomy</a>
+                        <a href="#" class="mega-link">Physics</a>
+                        <a href="#" class="mega-link">Ecology</a>
+                        <a href="#" class="mega-link">Biology</a>
+                        <a href="#" class="mega-link">Geology</a>
+                        <a href="#" class="mega-link">Zoology</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Hero Content Callout View -->
+    <section class="hero-section">
+        <h1 class="hero-title">24/7 Study Help</h1>
+        <p class="hero-subtitle">Get help with Study Questions from verified tutors.</p>
+        <button class="action-cta-btn" onclick="toggleAuthModal()">➕ Post a Question</button>
+        <div class="search-container">
+            <input type="text" class="hero-search-bar" placeholder="Search study resources...">
+        </div>
+    </section>
+
+    <!-- Split-Screen Pop Auth Modal Layout System -->
+    <div class="modal-overlay" id="authModal">
+        <div class="auth-container-box">
+            <span class="modal-close-trigger" onclick="toggleAuthModal()">✕</span>
+            <div class="modal-graphic-pane">
+                <h2>Takes 10 seconds to Sign up!</h2>
+            </div>
+            <div class="modal-form-pane">
+                <div class="tab-toggle-header">
+                    <span class="tab-btn">Login</span>
+                    <span class="tab-btn active">Sign Up</span>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" class="form-input-field" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" class="form-input-field" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-input-field" placeholder="Password">
+                </div>
+                <button class="form-submit-btn" onclick="processPremiumUnlock()">Create Account</button>
+                <p class="mpesa-helper-text">Already have an account? <span style="color: var(--primary-red); cursor: pointer;">Login</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAuthModal() {
+            const modal = document.getElementById('authModal');
+            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
         }
-
-        status.innerText = "Sending M-Pesa STK Push... Check your phone.";
-        status.style.color = "orange";
-
-        console.log("Initiating payment of KES 125 for phone: " + phone);
-    }
-</script>
-
+        function processPremiumUnlock() {
+            window.location.href = "dashboard.html";
+        }
+    </script>
 </body>
 </html>
