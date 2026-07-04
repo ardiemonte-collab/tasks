@@ -3,90 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskHub - Premium Workspace</title>
+    <title>TaskHub - Premium Live Workspace</title>
     <style>
-        :root {
-            --primary-red: #dc2626;
-            --primary-red-hover: #b91c1c;
-            --bg-body: #f8fafc;
-            --bg-card: #ffffff;
-            --border-color: #e2e8f0;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --success-green: #10b981;
-        }
-
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            margin: 0; padding: 0; background-color: var(--bg-body); color: var(--text-main);
-            display: flex; height: 100vh; overflow: hidden;
-        }
-
-        /* Sidebar Layout styling */
-        .sidebar {
-            width: 260px; background-color: var(--bg-card); border-right: 1px solid var(--border-color);
-            display: flex; flex-direction: column; padding: 24px; box-sizing: border-box;
-        }
-        .sidebar-brand {
-            font-size: 22px; font-weight: 800; color: var(--primary-red); text-decoration: none; margin-bottom: 32px;
-        }
+        :root { --primary-red: #dc2626; --primary-red-hover: #b91c1c; --bg-body: #f8fafc; --bg-card: #ffffff; --border-color: #e2e8f0; --text-main: #0f172a; --text-muted: #64748b; --success-green: #10b981; }
+        body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; background-color: var(--bg-body); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+        .sidebar { width: 260px; background-color: var(--bg-card); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 24px; box-sizing: border-box; }
+        .sidebar-brand { font-size: 22px; font-weight: 800; color: var(--primary-red); text-decoration: none; margin-bottom: 32px; }
         .sidebar-brand span { color: var(--text-main); font-weight: 400; }
         .menu-section { display: flex; flex-direction: column; gap: 8px; margin-bottom: 32px; }
-        .menu-item {
-            display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #475569;
-            text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 8px; cursor: pointer;
-        }
+        .menu-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #475569; text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 8px; cursor: pointer; }
         .menu-item.active { background-color: #f1f5f9; color: var(--primary-red); }
-        .menu-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); font-weight: 700; margin-bottom: 12px; padding-left: 16px; }
-
-        /* Workspace Panels */
         .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; box-sizing: border-box; }
         .top-bar { background-color: var(--bg-card); border-bottom: 1px solid var(--border-color); padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; min-height: 70px; }
         .page-title { margin: 0; font-size: 20px; font-weight: 700; }
-        .premium-status-tag { background-color: #fee2e2; color: var(--primary-red); padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
-
         .dashboard-grid { padding: 40px; display: flex; flex-direction: column; gap: 30px; }
-        .metrics-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         .metric-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; }
         .metric-label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
         .metric-value { font-size: 28px; font-weight: 700; margin-top: 8px; }
-
         .workspace-split { display: grid; grid-template-columns: 1.3fr 1fr; gap: 30px; }
         .panel-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; }
-        .panel-title { margin: 0 0 20px 0; font-size: 16px; font-weight: 700; }
-
-        /* Tasks Module */
         .task-list { display: flex; flex-direction: column; gap: 12px; }
-        .task-item { border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .task-item { border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; justify-content: space-between; align-items: center; background: white; }
         .task-name { font-weight: 600; font-size: 14px; }
         .task-action-btn { background-color: #f1f5f9; border: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
         .task-action-btn:hover { background-color: var(--primary-red); color: white; }
-
-        /* Wallet Component */
-        .wallet-display { background: linear-gradient(135deg, #1e293b, #0f172a); color: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
-        .wallet-title { font-size: 12px; text-transform: uppercase; opacity: 0.7; }
-        .wallet-amount { font-size: 32px; font-weight: 800; margin-bottom: 16px; }
+        .wallet-display { background: linear-gradient(135deg, #1e293b, #0f172a); color: white; border-radius: 12px; padding: 24px; }
+        .wallet-amount { font-size: 32px; font-weight: 800; margin-bottom: 16px; margin-top: 6px; }
         .withdraw-btn { width: 100%; background-color: var(--primary-red); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
-
-        /* Lightbox Modals System */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 9999; }
-        .modal-box { background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 480px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); position: relative; box-sizing: border-box; }
-        .close-btn { position: absolute; top: 16px; right: 20px; cursor: pointer; font-weight: bold; color: var(--text-muted); }
-        
-        .gateway-option-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-        .gateway-card-btn { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; background: #f8fafc; font-weight: 600; }
-        .gateway-card-btn:hover { border-color: var(--primary-red); background: #fee2e2; }
-
-        /* Form Controls */
+        .modal-box { background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 450px; position: relative; box-sizing: border-box; }
+        .close-btn { position: absolute; top: 16px; right: 20px; cursor: pointer; font-weight: bold; }
         .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; }
-        .form-input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; outline: none; font-size: 14px; box-sizing: border-box; background: #f8fafc; }
-        
-        .fee-breakdown-box { background: #f1f5f9; padding: 14px; border-radius: 8px; font-size: 13px; margin: 16px 0; }
-        .fee-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
-
+        .form-input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; }
         .quiz-choice-label { display: block; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; margin-bottom: 8px; cursor: pointer; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -94,243 +46,167 @@
         <a href="#" class="sidebar-brand">Study<span>Earn</span></a>
         <div class="menu-section">
             <div class="menu-item active">🏠 Workspace Home</div>
-            <div class="menu-item">📋 Premium Tasks</div>
-            <div class="menu-item">📥 Inbox Alerts</div>
-            <div class="menu-item">📊 My Earnings</div>
-        </div>
-        <div class="menu-title">Task Categories</div>
-        <div class="menu-section">
-            <div class="menu-item">🔬 Biology Modules</div>
-            <div class="menu-item">📐 Mathematics Tasks</div>
-            <div class="menu-item">💼 Business Reviews</div>
         </div>
     </aside>
 
     <main class="main-content">
         <header class="top-bar">
             <div>
-                <h2 class="page-title">Premium Dashboard</h2>
-                <p class="page-subtitle">Welcome back! Access your assigned paid tasks below.</p>
+                <h2 class="page-title">Live Account Premium Dashboard</h2>
+                <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-muted);" id="userPhoneDisplay">User: Loading...</p>
             </div>
-            <div class="premium-status-tag">Account Verified</div>
         </header>
 
         <div class="dashboard-grid">
             <div class="metrics-row">
                 <div class="metric-card">
-                    <div class="metric-label">Available Tasks</div>
+                    <div class="metric-label">Live Active Tasks</div>
                     <div class="metric-value" id="countAvailable">3</div>
                 </div>
                 <div class="metric-card">
-                    <div class="metric-label">Tasks Completed</div>
+                    <div class="metric-label">Approved Database Entries</div>
                     <div class="metric-value" id="countDone">0</div>
                 </div>
                 <div class="metric-card">
-                    <div class="metric-label">Pending Review</div>
-                    <div class="metric-value">0</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">Avg. Rate / Task</div>
-                    <div class="metric-value" style="color: var(--success-green);">$25.00</div>
+                    <div class="metric-label">Avg Rate Matrix</div>
+                    <div class="metric-value" style="color: var(--success-green);">$35.00</div>
                 </div>
             </div>
 
             <div class="workspace-split">
                 <div class="panel-card">
-                    <h3 class="panel-title">Available Premium Homework Tasks</h3>
-                    <div class="task-list">
+                    <h3 style="margin: 0 0 20px 0;">Rigorous Academic Evaluations</h3>
+                    <div class="task-list" id="taskList">
                         <div class="task-item" id="task-1">
-                            <div>
-                                <div class="task-name">Biology: Cellular Respiration Review Quiz</div>
-                                <div class="task-meta">Payout: $25.00</div>
-                            </div>
-                            <button class="task-action-btn" onclick="openQuizModule(1, 'Biology: Cellular Respiration', 'What is the primary energy currency produced during cellular respiration?', ['AMP', 'ADP', 'ATP'], 25.00)">Start Task</button>
+                            <div><div class="task-name">Advanced Biology: Cellular Replication</div><div style="font-size:12px; color:var(--text-muted);">Payout: $35.00</div></div>
+                            <button class="task-action-btn" onclick="openTask(1, 'What is the energy molecule produced in mitochondria?', ['AMP', 'ADP', 'ATP'], 2, 35.00)">Evaluate</button>
                         </div>
                         <div class="task-item" id="task-2">
-                            <div>
-                                <div class="task-name">Mathematics: Linear Equations Problem Set</div>
-                                <div class="task-meta">Payout: $30.00</div>
-                            </div>
-                            <button class="task-action-btn" onclick="openQuizModule(2, 'Mathematics: Linear Equations', 'Solve for x: 2x + 6 = 14', ['x = 2', 'x = 4', 'x = 8'], 30.00)">Start Task</button>
-                        </div>
-                        <div class="task-item" id="task-3">
-                            <div>
-                                <div class="task-name">Business: Marketing Case Study Evaluation</div>
-                                <div class="task-meta">Payout: $25.00</div>
-                            </div>
-                            <button class="task-action-btn" onclick="openQuizModule(3, 'Business: Marketing Management', 'Which element covers advertising?', ['Product', 'Price', 'Promotion'], 25.00)">Start Task</button>
+                            <div><div class="task-name">Higher Mathematics: Matrix Constraints</div><div style="font-size:12px; color:var(--text-muted);">Payout: $45.00</div></div>
+                            <button class="task-action-btn" onclick="openTask(2, 'Solve under KKT constraints: if non-binding, the multiplier is?', ['Infinity', 'Exactly Zero', 'Less than Zero'], 1, 45.00)">Evaluate</button>
                         </div>
                     </div>
                 </div>
 
                 <div>
                     <div class="wallet-display">
-                        <div class="wallet-title">Account Balance</div>
+                        <div class="wallet-title">Cloud Account Balance</div>
                         <div class="wallet-amount" id="accountBalance">$0.00</div>
-                        <button class="withdraw-btn" onclick="toggleWithdrawModal(true)">Withdraw Earnings</button>
+                        <button class="withdraw-btn" onclick="toggleModal('withdrawModal', true)">Request Payout Wire</button>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- Withdrawal Form -->
     <div class="modal-overlay" id="withdrawModal">
         <div class="modal-box">
-            <span class="close-btn" onclick="toggleWithdrawModal(false)">✕</span>
-            
-            <div id="withdrawSelectChannel">
-                <h3 style="margin: 0;">Withdraw Earnings</h3>
-                <p style="color: var(--text-muted); font-size: 13px; margin: 6px 0 20px 0;">Select your payment channel:</p>
-                <div class="gateway-option-list">
-                    <div class="gateway-card-btn" onclick="openMpesaForm()">
-                        <span>🟢 Safaricom M-Pesa Payout</span> <span>Select ➔</span>
-                    </div>
-                    <div class="gateway-card-btn" onclick="alert('PayPal integration pending backend hook.')">
-                        <span>🔵 PayPal Wallet</span> <span>Select ➔</span>
-                    </div>
-                </div>
+            <span class="close-btn" onclick="toggleModal('withdrawModal', false)">✕</span>
+            <h3>M-Pesa Wire Core Withdrawal</h3>
+            <div class="form-group">
+                <label style="font-size:12px; font-weight:bold; color:var(--text-muted);">Confirm Phone</label>
+                <input type="text" id="withdrawalPhone" class="form-input" readonly>
             </div>
-
-            <div id="withdrawMpesaForm" style="display: none;">
-                <h3 style="margin: 0; color: #16a34a;">M-Pesa Express Withdrawal</h3>
-                <p style="color: var(--text-muted); font-size: 13px; margin: 4px 0 20px 0;">Gateway Connected: <strong>StudyEarn API Merchant Portal</strong></p>
-                
-                <div class="form-group">
-                    <label>Safaricom Phone Number</label>
-                    <input type="tel" id="payoutPhone" class="form-input" placeholder="e.g. 07XXXXXXXX">
-                </div>
-                
-                <div class="form-group">
-                    <label>Amount to Withdraw (USD)</label>
-                    <input type="number" id="payoutAmount" class="form-input" placeholder="Enter amount in $" oninput="calculateMpesaFees()">
-                </div>
-
-                <div class="fee-breakdown-box">
-                    <div class="fee-row">
-                        <span>Transaction Process Fee:</span>
-                        <span style="font-weight: 600; color: var(--primary-red);">$2.00</span>
-                    </div>
-                    <div class="fee-row">
-                        <span>Net Amount Sent:</span>
-                        <span id="netUsdDisplay" style="font-weight: 600;">$0.00</span>
-                    </div>
-                    <hr style="border: 0; border-top: 1px solid #cbd5e1; margin: 8px 0;">
-                    <div class="fee-row" style="font-size: 14px; font-weight: 700; color: #16a34a;">
-                        <span>Total Payout (KES):</span>
-                        <span id="totalKesDisplay">0.00 KES</span>
-                    </div>
-                </div>
-
-                <button class="withdraw-btn" style="background-color: #16a34a;" onclick="submitMpesaPayoutRequest()">Submit M-Pesa Payout Request</button>
-                <button class="task-action-btn" style="width: 100%; margin-top: 8px;" onclick="backToChannels()">➔ Back to Channels</button>
+            <div class="form-group">
+                <label style="font-size:12px; font-weight:bold; color:var(--text-muted);">Amount (USD)</label>
+                <input type="number" id="withdrawalAmount" class="form-input" placeholder="Enter Amount ($)">
             </div>
-
+            <button class="withdraw-btn" onclick="executeLiveWithdrawal()" style="background:#16a34a;">Send STK Settlement Request</button>
         </div>
     </div>
 
+    <!-- Quiz Modal -->
     <div class="modal-overlay" id="quizModal">
         <div class="modal-box">
-            <h3 id="modalQuizTitle" style="margin: 0; color: var(--primary-red);">Task</h3>
-            <p id="modalQuizQuestion" style="font-weight: 600; margin: 20px 0 10px 0;"></p>
-            <div id="modalQuizChoices"></div>
-            <button class="withdraw-btn" style="margin-top: 10px;" id="submitQuizBtn">Submit Answer</button>
+            <h3 style="margin:0; color:var(--primary-red);">Assessment Check</h3>
+            <p id="quizQuestion" style="font-weight:600; margin: 20px 0;"></p>
+            <div id="quizChoices"></div>
+            <button class="withdraw-btn" id="submitQuizBtn">Submit Verification</button>
         </div>
     </div>
 
     <script>
-        let balance = 0.00;
-        let completedCount = 0;
-        let availableCount = 3;
-        let activeTaskId = null;
-        let activeTaskValue = 0;
-        const KES_EXCHANGE_RATE = 129.50; // Current simulated USD to KES conversion parameter
+        const SUPABASE_URL = "https://ataqcnrkwnfphdvbwazg.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0YXFjbnJrd25mcGhkdmJ3YXpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxNzEzOTMsImV4cCI6MjA5ODc0NzM5M30.g7LdgVybKMUF3fmTjpnXfX-EpNbkkQVLXS-2A0eKnO0";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        function toggleWithdrawModal(show) {
-            document.getElementById('withdrawModal').style.display = show ? 'flex' : 'none';
-            if(show) backToChannels();
-        }
+        const activePhone = localStorage.getItem('user_session_phone');
+        let currentDbId = null, currentBalance = 0.00, activeTask = null;
 
-        function openMpesaForm() {
-            document.getElementById('withdrawSelectChannel').style.display = 'none';
-            document.getElementById('withdrawMpesaForm').style.display = 'block';
-        }
+        if(!activePhone) { window.location.href = "index.html"; }
 
-        function backToChannels() {
-            document.getElementById('withdrawMpesaForm').style.display = 'none';
-            document.getElementById('withdrawSelectChannel').style.display = 'block';
-        }
+        async function fetchLiveProfile() {
+            document.getElementById('userPhoneDisplay').innerText = `Live Node: ${activePhone}`;
+            document.getElementById('withdrawalPhone').value = activePhone;
 
-        function calculateMpesaFees() {
-            const usdInput = parseFloat(document.getElementById('payoutAmount').value) || 0;
-            const fee = 2.00;
-            
-            if (usdInput <= fee) {
-                document.getElementById('netUsdDisplay').innerText = "$0.00";
-                document.getElementById('totalKesDisplay').innerText = "0.00 KES";
-                return;
+            let { data: profile } = await _supabase.from('profiles').select('*').eq('phone', activePhone).single();
+            if(profile) {
+                currentDbId = profile.id;
+                currentBalance = profile.balance;
+                document.getElementById('accountBalance').innerText = `$${profile.balance.toFixed(2)}`;
+                document.getElementById('countDone').innerText = profile.completed_tasks;
             }
-
-            const netUsd = usdInput - fee;
-            const totalKes = netUsd * KES_EXCHANGE_RATE;
-
-            document.getElementById('netUsdDisplay').innerText = `$${netUsd.toFixed(2)}`;
-            document.getElementById('totalKesDisplay').innerText = `${totalKes.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} KES`;
         }
 
-        function submitMpesaPayoutRequest() {
-            const phone = document.getElementById('payoutPhone').value;
-            const usdAmount = parseFloat(document.getElementById('payoutAmount').value) || 0;
-            const minimumWithdrawal = 5.00;
+        function toggleModal(id, show) { document.getElementById(id).style.display = show ? 'flex' : 'none'; }
 
-            if(!phone || usdAmount <= 0) {
-                alert('Please complete all form input fields accurately.');
-                return;
-            }
-
-            if(usdAmount < minimumWithdrawal) {
-                alert(`Withdrawal rejected. Platform rules require a minimum single withdrawal configuration threshold of $5.00.`);
-                return;
-            }
-
-            if(usdAmount > balance) {
-                alert(`Insufficient funds. Your current workspace balance ledger is $${balance.toFixed(2)}.`);
-                return;
-            }
-
-            // Deduct from balance
-            balance -= usdAmount;
-            document.getElementById('accountBalance').innerText = `$${balance.toFixed(2)}`;
-            toggleWithdrawModal(false);
-
-            alert(`Withdrawal Request Dispatched!\n\nMerchant Gateway: StudyEarn API Portal\nDestination: ${phone}\nAmount Processed: $${usdAmount.toFixed(2)} minus $2.00 fee.\nStatus: Awaiting backend validation check.`);
-        }
-
-        function openQuizModule(id, title, question, choices, payoutValue) {
-            activeTaskId = id; activeTaskValue = payoutValue;
-            document.getElementById('modalQuizTitle').innerText = title;
-            document.getElementById('modalQuizQuestion').innerText = question;
-            const choiceBox = document.getElementById('modalQuizChoices');
-            choiceBox.innerHTML = '';
-            choices.forEach((opt, idx) => {
-                choiceBox.innerHTML += `<label class="quiz-choice-label"><input type="radio" name="quizOpt" value="${idx}"> ${opt}</label>`;
+        function openTask(id, q, opts, correctIdx, payout) {
+            activeTask = { id, correctIdx, payout };
+            document.getElementById('quizQuestion').innerText = q;
+            const container = document.getElementById('quizChoices');
+            container.innerHTML = '';
+            opts.forEach((o, i) => {
+                container.innerHTML += `<label class="quiz-choice-label"><input type="radio" name="ropt" value="${i}"> ${o}</label>`;
             });
-            document.getElementById('quizModal').style.display = 'flex';
+            toggleModal('quizModal', true);
         }
 
-        document.getElementById('submitQuizBtn').onclick = function() {
-            const checkedOpt = document.querySelector('input[name="quizOpt"]:checked');
-            if(!checkedOpt) return alert('Please pick an answer.');
-            document.getElementById('quizModal').style.display = 'none';
-            const targetTaskItem = document.getElementById(`task-${activeTaskId}`);
-            if(targetTaskItem) targetTaskItem.remove();
-            
-            balance += activeTaskValue;
-            completedCount += 1; availableCount -= 1;
-            document.getElementById('accountBalance').innerText = `$${balance.toFixed(2)}`;
-            document.getElementById('countDone').innerText = completedCount;
-            document.getElementById('countAvailable').innerText = availableCount;
-            alert(`Task verified! Earned $${activeTaskValue.toFixed(2)}.`);
+        document.getElementById('submitQuizBtn').onclick = async function() {
+            const checked = document.querySelector('input[name="ropt"]:checked');
+            if(!checked) return alert("Select an answer option.");
+
+            toggleModal('quizModal', false);
+            const ans = parseInt(checked.value);
+
+            if(ans !== activeTask.correctIdx) {
+                return alert("❌ Verification Rejected: Incorrect answer submitted. Database entry cancelled.");
+            }
+
+            // Write updates straight into the live cloud database rows
+            const newBalance = currentBalance + activeTask.payout;
+            const newCount = parseInt(document.getElementById('countDone').innerText) + 1;
+
+            const { error } = await _supabase
+                .from('profiles')
+                .update({ balance: newBalance, completed_tasks: newCount })
+                .eq('phone', activePhone);
+
+            if(!error) {
+                document.getElementById(`task-${activeTask.id}`).remove();
+                let avail = parseInt(document.getElementById('countAvailable').innerText) - 1;
+                document.getElementById('countAvailable').innerText = avail;
+                await fetchLiveProfile();
+                alert(`✅ Database Confirmed! Added +$${activeTaskTask = activeTask.payout.toFixed(2)} to your cloud profile balance record.`);
+            }
         };
+
+        async function executeLiveWithdrawal() {
+            const amt = parseFloat(document.getElementById('withdrawalAmount').value) || 0;
+            if(amt < 5) return alert("Minimum withdrawal structural rule requires $5.00 threshold limit.");
+            if(amt > currentBalance) return alert("Insufficient account profile ledger balance values.");
+
+            const nextBalance = currentBalance - amt;
+            const { error } = await _supabase.from('profiles').update({ balance: nextBalance }).eq('phone', activePhone);
+
+            if(!error) {
+                toggleModal('withdrawModal', false);
+                await fetchLiveProfile();
+                alert(`Payout Command Dispatched!\n\nBridge Endpoint: StudyEarn API Portal\nDispatched Sum: $${amt.toFixed(2)}\nNet balance securely updated across system nodes.`);
+            }
+        }
+
+        window.onload = fetchLiveProfile;
     </script>
 </body>
 </html>
