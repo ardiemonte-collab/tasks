@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskHub - Member Dashboard</title>
+    <style>
+        :root {
+            --primary-red: #dc2626;
+            --primary-red-hover: #b91c1c;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --success-green: #10b981;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Design Panel */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-card);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        .sidebar-brand {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary-red);
+            text-decoration: none;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .sidebar-brand span {
+            color: var(--text-main);
+            font-weight: 400;
+        }
+
+        .menu-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #475569;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: #f1f5f9;
+            color: var(--primary-red);
+        }
+
+        .menu-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 12px;
+            padding-left: 16px;
+        }
+
+        /* Main Workspace Content Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        /* Top Header Navbar Row */
+        .top-bar {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 70px;
+            box-sizing: border-box;
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .page-subtitle {
+            margin: 4px 0 0 0;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .search-wrapper {
+            width: 320px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 16px;
+            background-color: #f1f5f9;
+            border: 1px solid transparent;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .search-input:focus {
+            border-color: var(--border-color);
+            background-color: var(--bg-card);
+        }
+
+        /* Dashboard Overview Grid Container */
+        .dashboard-grid {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Stats Metric Bar Row */
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+
+        .metric-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .trend-up { color: var(--success-green); font-size: 12px; }
+        .trend-neutral { color: var(--text-muted); font-size: 12px; }
+
+        /* Split Section Layout Blocks */
+        .workspace-split {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 30px;
+        }
+
+        .panel-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        /* Tasks Feed Module Lists */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task-item {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.2s;
+        }
+
+        .task-item:hover {
+            border-color: #cbd5e1;
+        }
+
+        .task-name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+        .task-meta { font-size: 12px; color: var(--text-muted); }
+
+        .task-action-btn {
+            background-color: #f1f5f9;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        .task-action-btn:hover {
+            background-color: var(--primary-red);
+            color: white;
+        }
+
+        /* Projects Grid Widgets */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .project-widget {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .project-icon-box {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background-color: #eff6ff;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .project-details h4 { margin: 0; font-size: 13px; font-weight: 600; }
+        .project-details p { margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted); }
+
+        /* Notepad Component block styling */
+        .notepad-textarea {
+            width: 100%;
+            height: 120px;
+            border: 1px solid var(--border-color);
+            background-color: #fafafa;
+            border-radius: 8px;
+            padding: 12px;
+            box-sizing: border-box;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <a href="#" class="sidebar-brand">Task<span>hub</span></a>
+        
+        <div class="menu-section">
+            <a href="#" class="menu-item active">🏠 Home</a>
+            <a href="#" class="menu-item">📋 My Tasks</a>
+            <a href="#" class="menu-item">📥 Inbox</a>
+            <a href="#" class="menu-item">📊 Analytics</a>
+        </div>
+
+        <div class="menu-title">Projects</div>
+        <div class="menu-section">
+            <a href="#" class="menu-item">🔹 System Review</a>
+            <a href="#" class="menu-item">🔹 Data Extraction</a>
+            <a href="#" class="menu-item">🔹 Content Writing</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="top-bar">
+            <div>
+                <h2 class="page-title">Home</h2>
+                <p class="page-subtitle">Monitor all of your projects and tasks here</p>
+            </div>
+            <div class="search-wrapper">
+                <input type="text" class="search-input" placeholder="Search anything...">
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            
+            <div class="metrics-row">
+                <div class="metric-card">
+                    <div class="metric-label">Total Projects <span class="trend-up">▲ 2</span></div>
+                    <div class="metric-value">7</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Total Tasks <span class="trend-up">▲ 4</span></div>
+                    <div class="metric-value">49</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Assigned Tasks <span class="trend-neutral">▼ 3</span></div>
+                    <div class="metric-value">12</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Completed Tasks <span class="trend-up">▲ 1</span></div>
+                    <div class="metric-value">6</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Overdue Tasks <span class="trend-neutral">▲ 2</span></div>
+                    <div class="metric-value">3</div>
+                </div>
+            </div>
+
+            <div class="workspace-split">
+                
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <h3 class="panel-title">Assigned Tasks</h3>
+                    </div>
+                    <div class="task-list">
+                        <div class="task-item">
+                            <div>
+                                <div class="task-name">Web Interface Mockup</div>
+                                <div class="task-meta">UI/UX Dev • Due in 20 hours</div>
+                            </div>
+                            <button class="task-action-btn">Open</button>
+                        </div>
+                        <div class="task-item">
+                            <div>
+                                <div class="task-name">Landing Page Flow</div>
+                                <div class="task-meta">Front End • Due in 3 days</div>
+                            </div>
+                            <button class="task-action-btn">Open</button>
+                        </div>
+                        <div class="task-item">
+                            <div>
+                                <div class="task-name">Data Verification Pipeline</div>
+                                <div class="task-meta">Core System • Due in 1 week</div>
+                            </div>
+                            <button class="task-action-btn">Open</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-card" style="display: flex; flex-direction: column; gap: 24px;">
+                    <div>
+                        <div class="panel-header">
+                            <h3 class="panel-title">Projects Overview</h3>
+                        </div>
+                        <div class="projects-grid">
+                            <a href="#" class="project-widget">
+                                <div class="project-icon-box" style="background-color: #fee2e2; color: #ef4444;">W</div>
+                                <div class="project-details">
+                                    <h4>Writing</h4>
+                                    <p>1 task due soon</p>
+                                </div>
+                            </a>
+                            <a href="#" class="project-widget">
+                                <div class="project-icon-box" style="background-color: #fef3c7; color: #d97706;">D</div>
+                                <div class="project-details">
+                                    <h4>Data Verification</h4>
+                                    <p>4 tasks due</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="panel-header">
+                            <h3 class="panel-title">Private Notepad</h3>
+                        </div>
+                        <textarea class="notepad-textarea" placeholder="Write down quick study notes or task context parameters here..."></br></textarea>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
